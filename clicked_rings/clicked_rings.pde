@@ -8,7 +8,7 @@
 
 import java.util.AbstractList;
 
-final color bgColor = color(0, 0, 0, 0);
+final color bgColor = color(0, 0, 0, 255);
 final int DIMENSION = 400;
 ArrayList<ProximityRing> proximityRings = new ArrayList<ProximityRing>();
 
@@ -32,13 +32,11 @@ class ProximityRing {
   public void draw() {
     // Draw the outer ring with a progressively dimming color (on alpha channel)
     ringColor = color(255, 255, 255, 255 - currentDiameter*3.5);
-    fill(ringColor);
+    noFill();
+    stroke(ringColor);
+    strokeWeight(5);
     ellipse(x, y, currentDiameter, currentDiameter);
     
-    // Fill the inner to make the first ellipse appear as a ring
-    fill(bgColor);
-    ellipse(x, y, currentDiameter - 5, currentDiameter - 5);
-
     // Reset the size when we get to the maximum
     currentDiameter += 1;
     if (currentDiameter > maxDiameter) {
@@ -52,7 +50,6 @@ void settings() {
 }
 
 void setup() {
-  noStroke();
   background(bgColor);
 }
 
