@@ -5,6 +5,11 @@
  */
 
 import java.util.AbstractList;
+import processing.sound.*;
+
+// Rain noise
+WhiteNoise noise;
+LowPass lowPass;
 
 final color bgColor = color(0, 0, 0, 255);
 final int DIMENSION = 400;
@@ -50,14 +55,14 @@ class Droplet {
     if (!alive) return;
 
     // Draw the droplet with a progressively dimming color (on alpha channel)
-    dropletColor = color(255, 255, 255, 255 - currentSize*20*lifetimeRatio);
+    dropletColor = color(255, 255, 255, 255 - (20+currentSize*20*lifetimeRatio));
     noFill();
     stroke(dropletColor);
-    strokeWeight(2);
+    strokeWeight(2+1*sizeRatio);
     ellipse(x, y, currentSize, currentSize/3);
 
     // Remove the object from the collection if it has reached the maximum size.
-    currentSize += 3*sizeRatio;
+    currentSize += 3.5*sizeRatio;
     if (currentSize > maxSize*sizeRatio) {
       alive = false;
     }
@@ -70,6 +75,12 @@ void settings() {
 
 void setup() {
   background(bgColor);
+
+  // Create the noise generator
+  noise = new WhiteNoise(this);
+  lowPass = new LowPass(this);
+  noise.play(0.5);
+  lowPass.process(noise, 200);
 }
 
 void draw() {
@@ -78,7 +89,7 @@ void draw() {
 
   // Draw some simple background stuff
   drawBackground();
-  
+
   // Randomly spawn new droplet somewhere in the window.
   if (random(0, 1) <= spawnProbability) {
     droplets.add(new Droplet());
@@ -120,7 +131,7 @@ void drawBackground() {
   ellipse(60,95,70,15);
   ellipse(200,95,70,15);
   ellipse(340,95,70,15);
-  
+
   // Draw the current probability of rainfall
   textSize(20);
   fill(color(120,120,120));
@@ -131,4 +142,6 @@ void drawBackground() {
 // Bottom == 1.0, Top == 0.0
 void mouseMoved() {
   spawnProbability = float(mouseY)/DIMENSION;
+
+  lowPass.freq(spawnProbability * 1000);
 }
