@@ -1,4 +1,4 @@
-int dimension = 200;
+int dimension = 256;
 int x, y = 0;
 boolean initialFill = false;
 boolean sorted = false;
@@ -6,8 +6,8 @@ int speedFactor = 10;
 boolean recordOutput = false;
 
 void setup() {
-  size(200, 200);
-  //frameRate(100);
+  size(256, 256);
+  colorMode(HSB);
 }
 
 void draw() {
@@ -44,9 +44,7 @@ void sortIteration() {
     for (int i = 0; i < (dimension*dimension-1); i++) {
       if (hue(pixels[i]) < hue(pixels[i+1])) {
         sorted = false;
-        color temp = pixels[i];
-        pixels[i] = pixels[i+1];
-        pixels[i+1] = temp;
+        swapPixels(i, i + 1);
       }
     }
     
@@ -58,6 +56,12 @@ void sortIteration() {
   updatePixels();
 }
 
+void swapPixels(int a, int b) {
+  color temp = pixels[a];
+  pixels[a] = pixels[b];
+  pixels[b] = temp;
+}
+
 color randomColor() {
-  return color(int(random(0,256)), int(random(0,256)), int(random(0,256)));
+  return color(int(random(0,256)), 255, 255);
 }
