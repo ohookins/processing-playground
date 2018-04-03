@@ -26,10 +26,12 @@ void draw() {
   // Start merge sort outer loop
   if (width < numberOfLists) {
      mergeSortIteration();
-  }
-  
-  if (recordOutput) {
-    saveFrame("output-#####.png");
+    
+    // ONLY capture frames if we are still sorting. Having saveFrame outside of this
+    // block is a great way to fill your hard drive.
+    if (recordOutput) {
+      saveFrame("output-#####.png");
+    }
   }
 }
 
